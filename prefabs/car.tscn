@@ -1,0 +1,233 @@
+[gd_scene load_steps=15 format=3 uid="uid://ccce8xm01fspe"]
+
+[ext_resource type="Script" path="res://prefabs/car.gd" id="1_0yjcw"]
+[ext_resource type="Script" path="res://prefabs/wheel.gd" id="2_vki02"]
+[ext_resource type="PackedScene" uid="uid://6k1tm8w0wggk" path="res://prefabs/headlight.tscn" id="3_620jp"]
+
+[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_eneb5"]
+friction = 0.2
+bounce = 0.3
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_xcaum"]
+transparency = 1
+shading_mode = 0
+vertex_color_use_as_albedo = true
+billboard_keep_scale = true
+
+[sub_resource type="SphereMesh" id="SphereMesh_lymfc"]
+material = SubResource("StandardMaterial3D_xcaum")
+radius = 0.2
+height = 0.4
+
+[sub_resource type="Curve" id="Curve_o5k1r"]
+_data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(0.146438, 1), 0.0, 0.0, 0, 0, Vector2(1, 0.48508), 0.0, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="Gradient" id="Gradient_wm788"]
+offsets = PackedFloat32Array(0, 0.0727273, 0.218182, 0.754545, 1)
+colors = PackedColorArray(0, 0, 0, 1, 1, 0, 0, 1, 1, 0.478431, 0, 1, 1, 0, 0, 1, 0, 0, 0, 1)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_p8tlj"]
+size = Vector3(1.25, 0.4, 2.15)
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_vdkuc"]
+height = 0.25
+radius = 0.3
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_p3m77"]
+albedo_color = Color(1, 0, 0, 1)
+emission_enabled = true
+emission = Color(1, 0, 0, 1)
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_uu4f8"]
+top_radius = 0.25
+bottom_radius = 0.25
+height = 0.25
+radial_segments = 30
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_l2lue"]
+albedo_color = Color(0, 0, 0, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_s6qmj"]
+shading_mode = 0
+disable_fog = true
+albedo_color = Color(0.419608, 0.643137, 0.341176, 1)
+disable_receive_shadows = true
+
+[node name="car" type="RigidBody3D"]
+transform = Transform3D(1, -3.48787e-16, 3.48787e-16, 3.48787e-16, 1, -3.48787e-16, -3.48787e-16, 3.48787e-16, 1, 2.08165e-12, 0.35, 2.08165e-12)
+input_ray_pickable = false
+physics_material_override = SubResource("PhysicsMaterial_eneb5")
+script = ExtResource("1_0yjcw")
+
+[node name="fire" type="CPUParticles3D" parent="."]
+transform = Transform3D(1, -3.48787e-16, -1.07587e-09, 3.48787e-16, 1, -3.48787e-16, -3.20176e-09, 3.48787e-16, 1, 0, 0.026732, -1.093)
+visible = false
+cast_shadow = 0
+amount = 200
+lifetime = 0.2
+speed_scale = 0.5
+randomness = 1.0
+draw_order = 2
+mesh = SubResource("SphereMesh_lymfc")
+emission_shape = 1
+emission_sphere_radius = 0.4
+direction = Vector3(2.08165e-12, 2.08165e-12, -1)
+spread = 0.0
+gravity = Vector3(2.08165e-12, 2.08165e-12, 2.08165e-12)
+initial_velocity_min = 4.0
+initial_velocity_max = 6.0
+angular_velocity_max = 40.0
+linear_accel_max = 4.0
+angle_max = 360.0
+scale_amount_min = 0.0
+scale_amount_max = 0.5
+scale_amount_curve = SubResource("Curve_o5k1r")
+color_ramp = SubResource("Gradient_wm788")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, -3.78925e-15, 2.64698e-23, 3.78925e-15, 1, -2.64698e-23, 0, 2.64698e-23, 1, 0, 0.19328, 0)
+shape = SubResource("BoxShape3D_p8tlj")
+
+[node name="CSGBox3D" type="CSGBox3D" parent="."]
+transform = Transform3D(1, 1.51089e-23, -2.64698e-23, -1.51089e-23, 1, 2.64698e-23, 2.64698e-23, -2.64698e-23, 1, 0, 0.19328, 0)
+size = Vector3(1, 0.4, 2)
+
+[node name="CSGBox3D2" type="CSGBox3D" parent="."]
+transform = Transform3D(1, -1.21652e-31, 0, -1.21652e-31, 1, 0, 0, 0, 1, 0, 0.572818, 0)
+size = Vector3(1, 0.4, 1)
+
+[node name="wheels" type="Node3D" parent="."]
+transform = Transform3D(1, -1.21652e-31, 0, -1.21652e-31, 1, 0, 0, 0, 1, 0, 0.19328, 0)
+
+[node name="FR" type="Node3D" parent="wheels"]
+transform = Transform3D(1, -1.21652e-31, 0, -1.21652e-31, 1, 0, 0, 0, 1, -0.5, -0.304393, 0.5)
+script = ExtResource("2_vki02")
+
+[node name="ShapeCast3D" type="ShapeCast3D" parent="wheels/FR"]
+transform = Transform3D(-4.37114e-08, -1, 3.48787e-16, 1, -4.37114e-08, -3.48787e-16, 3.48787e-16, 3.48787e-16, 1, 0, 0, 0)
+shape = SubResource("CylinderShape3D_vdkuc")
+target_position = Vector3(-1, 0, 0)
+
+[node name="point" type="CSGSphere3D" parent="wheels/FR"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.25, 0)
+radius = 0.15
+material = SubResource("StandardMaterial3D_p3m77")
+
+[node name="mesh" type="Node3D" parent="wheels/FR"]
+
+[node name="CSGMesh3D" type="CSGMesh3D" parent="wheels/FR/mesh"]
+transform = Transform3D(-4.37114e-08, -1, 3.48787e-16, 1, -4.37114e-08, -3.48787e-16, 3.48787e-16, 3.48787e-16, 1, 0, 0, 0)
+mesh = SubResource("CylinderMesh_uu4f8")
+
+[node name="CSGBox3D" type="CSGBox3D" parent="wheels/FR/mesh"]
+transform = Transform3D(-4.37114e-08, -1, 3.48787e-16, 1, -4.37114e-08, -3.48787e-16, 3.48787e-16, 3.48787e-16, 1, 0, 0, 0)
+size = Vector3(0.05, 0.3, 0.25)
+material = SubResource("StandardMaterial3D_l2lue")
+
+[node name="FL" type="Node3D" parent="wheels"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.5, -0.304393, 0.5)
+script = ExtResource("2_vki02")
+
+[node name="ShapeCast3D" type="ShapeCast3D" parent="wheels/FL"]
+transform = Transform3D(-4.37114e-08, -1, 3.48787e-16, 1, -4.37114e-08, -3.48787e-16, 3.48787e-16, 3.48787e-16, 1, 2.08165e-12, 2.08165e-12, 2.08165e-12)
+shape = SubResource("CylinderShape3D_vdkuc")
+target_position = Vector3(-1, 0, 0)
+
+[node name="point" type="CSGSphere3D" parent="wheels/FL"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.25, 0)
+radius = 0.15
+material = SubResource("StandardMaterial3D_p3m77")
+
+[node name="mesh" type="Node3D" parent="wheels/FL"]
+
+[node name="CSGMesh3D" type="CSGMesh3D" parent="wheels/FL/mesh"]
+transform = Transform3D(-4.37114e-08, -1, 3.48787e-16, 1, -4.37114e-08, -3.48787e-16, 3.48787e-16, 3.48787e-16, 1, 0, 0, 0)
+mesh = SubResource("CylinderMesh_uu4f8")
+
+[node name="CSGBox3D" type="CSGBox3D" parent="wheels/FL/mesh"]
+transform = Transform3D(-4.37114e-08, -1, 3.48787e-16, 1, -4.37114e-08, -3.48787e-16, 3.48787e-16, 3.48787e-16, 1, 0, 0, 0)
+size = Vector3(0.05, 0.3, 0.25)
+material = SubResource("StandardMaterial3D_l2lue")
+
+[node name="BR" type="Node3D" parent="wheels"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.5, -0.304393, -0.5)
+script = ExtResource("2_vki02")
+use_as_steering = false
+
+[node name="ShapeCast3D" type="ShapeCast3D" parent="wheels/BR"]
+transform = Transform3D(-4.37114e-08, -1, 3.48787e-16, 1, -4.37114e-08, -3.48787e-16, 3.48787e-16, 3.48787e-16, 1, 2.08165e-12, 2.08165e-12, 2.08165e-12)
+shape = SubResource("CylinderShape3D_vdkuc")
+target_position = Vector3(-1, 0, 0)
+
+[node name="point" type="CSGSphere3D" parent="wheels/BR"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.25, 0)
+radius = 0.15
+material = SubResource("StandardMaterial3D_p3m77")
+
+[node name="mesh" type="Node3D" parent="wheels/BR"]
+
+[node name="CSGMesh3D" type="CSGMesh3D" parent="wheels/BR/mesh"]
+transform = Transform3D(-4.37114e-08, -1, 3.48787e-16, 1, -4.37114e-08, -3.48787e-16, 3.48787e-16, 3.48787e-16, 1, 0, 0, 0)
+mesh = SubResource("CylinderMesh_uu4f8")
+
+[node name="CSGBox3D" type="CSGBox3D" parent="wheels/BR/mesh"]
+transform = Transform3D(-4.37114e-08, -1, 3.48787e-16, 1, -4.37114e-08, -3.48787e-16, 3.48787e-16, 3.48787e-16, 1, 0, 0, 0)
+size = Vector3(0.05, 0.3, 0.25)
+material = SubResource("StandardMaterial3D_l2lue")
+
+[node name="BL" type="Node3D" parent="wheels"]
+transform = Transform3D(1, 0, -5.37937e-10, 0, 1, 0, -1.60088e-09, 0, 1, 0.5, -0.304393, -0.499999)
+script = ExtResource("2_vki02")
+use_as_steering = false
+
+[node name="ShapeCast3D" type="ShapeCast3D" parent="wheels/BL"]
+transform = Transform3D(-4.37114e-08, -1, 3.48787e-16, 1, -4.37114e-08, -3.48787e-16, 3.48787e-16, 3.48787e-16, 1, 2.08165e-12, 2.08165e-12, 2.08165e-12)
+shape = SubResource("CylinderShape3D_vdkuc")
+target_position = Vector3(-1, 0, 0)
+
+[node name="point" type="CSGSphere3D" parent="wheels/BL"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.25, 0)
+radius = 0.15
+material = SubResource("StandardMaterial3D_p3m77")
+
+[node name="mesh" type="Node3D" parent="wheels/BL"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 1.11022e-16, 0, 1, 0, 0, 0)
+
+[node name="CSGMesh3D" type="CSGMesh3D" parent="wheels/BL/mesh"]
+transform = Transform3D(-4.37114e-08, -1, 3.48787e-16, 1, -4.37114e-08, -3.48787e-16, 3.48787e-16, 3.48787e-16, 1, 0, 0, 0)
+mesh = SubResource("CylinderMesh_uu4f8")
+
+[node name="CSGBox3D" type="CSGBox3D" parent="wheels/BL/mesh"]
+transform = Transform3D(-4.37114e-08, -1, 3.48787e-16, 1, -4.37114e-08, -3.48787e-16, 3.48787e-16, 3.48787e-16, 1, 0, 0, 0)
+size = Vector3(0.05, 0.3, 0.25)
+material = SubResource("StandardMaterial3D_l2lue")
+
+[node name="joystick" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.747904, 0)
+
+[node name="CSGCylinder3D" type="CSGCylinder3D" parent="joystick"]
+transform = Transform3D(1, -1.21652e-31, 0, -1.21652e-31, 1, 0, 0, 0, 1, 0, 0.233693, 0)
+radius = 0.05
+height = 0.5
+material = SubResource("StandardMaterial3D_s6qmj")
+
+[node name="headlights" type="Node3D" parent="."]
+
+[node name="light1" parent="headlights" instance=ExtResource("3_620jp")]
+transform = Transform3D(0.2, -5.43895e-10, -7.07924e-10, 6.04117e-17, 0.173205, -0.1, 3.70115e-10, 0.1, 0.173205, -0.349999, 0.2, 0.983999)
+
+[node name="light2" parent="headlights" instance=ExtResource("3_620jp")]
+transform = Transform3D(0.2, -5.43895e-10, -7.07924e-10, 6.04117e-17, 0.173205, -0.1, 3.70115e-10, 0.1, 0.173205, 0.35, 0.2, 0.983999)
+
+[node name="backlights" type="Node3D" parent="."]
+transform = Transform3D(-1, 3.48787e-16, -8.74228e-08, 3.48787e-16, 1, -3.48787e-16, 8.74228e-08, -3.48787e-16, -1, 0, 0, 0)
+
+[node name="light1" parent="backlights" instance=ExtResource("3_620jp")]
+transform = Transform3D(0.2, -5.43895e-10, -7.07924e-10, 6.04117e-17, 0.173205, -0.1, 3.70115e-10, 0.1, 0.173205, -0.349999, 0.2, 0.983999)
+
+[node name="light2" parent="backlights" instance=ExtResource("3_620jp")]
+transform = Transform3D(0.2, -5.43895e-10, -7.07924e-10, 6.04117e-17, 0.173205, -0.1, 3.70115e-10, 0.1, 0.173205, 0.35, 0.2, 0.983999)
+
+[node name="trail_point" type="Node3D" parent="."]
+transform = Transform3D(1, -1.21652e-31, 0, -1.21652e-31, 1, 0, 0, 0, 1, 2.08165e-12, 0.12, 2.08165e-12)

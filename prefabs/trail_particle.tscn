@@ -1,0 +1,41 @@
+[gd_scene load_steps=3 format=3 uid="uid://dajefy4wwbs2f"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_xyxdq"]
+blend_mode = 1
+shading_mode = 0
+disable_ambient_light = true
+disable_fog = true
+albedo_color = Color(0.160784, 0.160784, 0.160784, 1)
+disable_receive_shadows = true
+
+[sub_resource type="GDScript" id="GDScript_4ju2o"]
+script/source = "extends CSGSphere3D
+
+var lifespan = 5.0
+var timer = 0.0
+var original_color: Color
+
+func _ready():
+	cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+	original_color = material.albedo_color
+	material = material.duplicate()
+
+func _process(delta):
+	timer += delta
+	
+	var t = timer/lifespan
+	material.albedo_color.r = lerp(original_color.r, 0.0, t)
+	material.albedo_color.g = lerp(original_color.g, 0.0, t)
+	material.albedo_color.b = lerp(original_color.b, 0.0, t)
+	
+	if timer >= lifespan:
+		queue_free()
+"
+
+[node name="trail_particle" type="CSGSphere3D"]
+transform = Transform3D(1, -1.21652e-31, 0, -1.21652e-31, 1, 0, 0, 0, 1, 2.08165e-12, 2.08165e-12, 2.08165e-12)
+radius = 0.05
+radial_segments = 6
+smooth_faces = false
+material = SubResource("StandardMaterial3D_xyxdq")
+script = SubResource("GDScript_4ju2o")

@@ -1,0 +1,215 @@
+[gd_scene load_steps=15 format=3 uid="uid://1xfy1k0owe4b"]
+
+[ext_resource type="Script" path="res://prefabs/obstacle.gd" id="1_20mow"]
+[ext_resource type="Script" path="res://prefabs/Camera3D.gd" id="2_ad51y"]
+[ext_resource type="Shader" path="res://assets/shaders/outline.gdshader" id="3_xa1i8"]
+[ext_resource type="PackedScene" uid="uid://ccce8xm01fspe" path="res://prefabs/car.tscn" id="4_bcv67"]
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_2j7pt"]
+sky_top_color = Color(0.788235, 0.807843, 0.843137, 1)
+sky_horizon_color = Color(0.639216, 0.670588, 0.721569, 1)
+ground_bottom_color = Color(0.639216, 0.670588, 0.721569, 1)
+ground_horizon_color = Color(0.639216, 0.670588, 0.721569, 1)
+
+[sub_resource type="Sky" id="Sky_rcc80"]
+sky_material = SubResource("ProceduralSkyMaterial_2j7pt")
+
+[sub_resource type="Environment" id="Environment_hydr3"]
+background_mode = 2
+background_color = Color(1, 1, 1, 1)
+sky = SubResource("Sky_rcc80")
+ambient_light_source = 2
+ambient_light_color = Color(1, 1, 1, 1)
+ambient_light_energy = 0.1
+sdfgi_enabled = true
+fog_enabled = true
+fog_light_color = Color(0.517647, 0.552941, 0.607843, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_x2cji"]
+albedo_color = Color(0.192157, 0.192157, 0.192157, 1)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_f0rlm"]
+size = Vector3(100, 1, 100)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_so03o"]
+size = Vector3(10, 1, 10)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_4v0ra"]
+size = Vector3(1, 5, 10)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_xkyby"]
+size = Vector3(3, 1, 5)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_3wa1o"]
+render_priority = 0
+shader = ExtResource("3_xa1i8")
+
+[sub_resource type="QuadMesh" id="QuadMesh_4wtd1"]
+material = SubResource("ShaderMaterial_3wa1o")
+flip_faces = true
+size = Vector2(2, 2)
+
+[node name="protoworld" type="Node3D"]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_hydr3")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(0.915726, -0.147875, -0.373603, -2.8456e-16, -0.929815, 0.368027, -0.401804, -0.337012, -0.851456, 0, 25.5783, 0)
+light_color = Color(0.768627, 0.678431, 0.564706, 1)
+shadow_enabled = true
+shadow_blur = 0.0
+
+[node name="obstacles" type="Node3D" parent="."]
+transform = Transform3D(-1, 3.48787e-16, -8.74228e-08, 3.48787e-16, 1, -3.48787e-16, 8.74228e-08, -3.48787e-16, -1, 0, 0, 0)
+
+[node name="ground" type="StaticBody3D" parent="obstacles"]
+transform = Transform3D(1, -4.02216e-24, 0, -4.02216e-24, 1, 0, 0, 0, 1, 0, 0, 0)
+metadata/_edit_group_ = true
+
+[node name="CSGBox3D" type="CSGBox3D" parent="obstacles/ground"]
+transform = Transform3D(1, -4.02216e-24, 0, -4.02216e-24, 1, 0, 0, 0, 1, 0, 0, 0)
+size = Vector3(100, 1, 100)
+material = SubResource("StandardMaterial3D_x2cji")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="obstacles/ground"]
+shape = SubResource("BoxShape3D_f0rlm")
+
+[node name="floor" type="StaticBody3D" parent="obstacles"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.08165e-12, 0.222, -11.318)
+script = ExtResource("1_20mow")
+metadata/_edit_group_ = true
+
+[node name="CSGBox3D" type="CSGBox3D" parent="obstacles/floor"]
+size = Vector3(10, 1, 10)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="obstacles/floor"]
+shape = SubResource("BoxShape3D_so03o")
+
+[node name="ramp" type="StaticBody3D" parent="obstacles"]
+transform = Transform3D(1, -1.63777e-15, 2.68143e-15, -4.02216e-24, 0.935049, -0.35452, 0, 0.35452, 0.935049, -8.94159, 1.79246, -11.318)
+script = ExtResource("1_20mow")
+metadata/_edit_group_ = true
+
+[node name="CSGBox3D" type="CSGBox3D" parent="obstacles/ramp"]
+size = Vector3(10, 1, 10)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="obstacles/ramp"]
+shape = SubResource("BoxShape3D_so03o")
+
+[node name="ramp2" type="StaticBody3D" parent="obstacles"]
+transform = Transform3D(1, -1.63777e-15, 2.68143e-15, -4.02216e-24, 0.935049, -0.35452, 0, 0.35452, 0.935049, -8.94159, 1.79246, 17.4969)
+script = ExtResource("1_20mow")
+metadata/_edit_group_ = true
+
+[node name="CSGBox3D" type="CSGBox3D" parent="obstacles/ramp2"]
+size = Vector3(10, 1, 10)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="obstacles/ramp2"]
+shape = SubResource("BoxShape3D_so03o")
+
+[node name="wall" type="StaticBody3D" parent="obstacles"]
+transform = Transform3D(-4.37114e-08, 3.48787e-16, 1, 3.48787e-16, 1, -3.48787e-16, -1, 3.48787e-16, -4.37114e-08, 2.08165e-12, 2.5177, -16.034)
+script = ExtResource("1_20mow")
+metadata/_edit_group_ = true
+
+[node name="CSGBox3D" type="CSGBox3D" parent="obstacles/wall"]
+size = Vector3(1, 5, 10)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="obstacles/wall"]
+shape = SubResource("BoxShape3D_4v0ra")
+
+[node name="wall3" type="StaticBody3D" parent="obstacles"]
+transform = Transform3D(0.880477, -2.65411e-16, 0.474088, 2.25119e-16, 1, 1.41743e-16, -0.474088, -1.80754e-17, 0.880477, 8.38186, 2.5177, -6.01364)
+script = ExtResource("1_20mow")
+metadata/_edit_group_ = true
+
+[node name="CSGBox3D" type="CSGBox3D" parent="obstacles/wall3"]
+size = Vector3(1, 5, 10)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="obstacles/wall3"]
+shape = SubResource("BoxShape3D_4v0ra")
+
+[node name="wall2" type="StaticBody3D" parent="obstacles"]
+transform = Transform3D(-4.37114e-08, 3.48787e-16, 1, 3.48787e-16, 1, -3.48787e-16, -1, 3.48787e-16, -4.37114e-08, -9.21922, 2.5177, -16.034)
+script = ExtResource("1_20mow")
+metadata/_edit_group_ = true
+
+[node name="CSGBox3D" type="CSGBox3D" parent="obstacles/wall2"]
+size = Vector3(1, 5, 10)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="obstacles/wall2"]
+shape = SubResource("BoxShape3D_4v0ra")
+
+[node name="step" type="StaticBody3D" parent="obstacles"]
+transform = Transform3D(-0.0289858, 3.69007e-16, -0.99958, 1.05632e-15, 1, 3.38531e-16, 0.99958, -1.04607e-15, -0.0289858, -9.63504, 3.48666, 11.929)
+script = ExtResource("1_20mow")
+metadata/_edit_group_ = true
+
+[node name="CSGBox3D" type="CSGBox3D" parent="obstacles/step"]
+size = Vector3(3, 1, 5)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="obstacles/step"]
+shape = SubResource("BoxShape3D_xkyby")
+
+[node name="step2" type="StaticBody3D" parent="obstacles"]
+transform = Transform3D(-0.0289858, 3.69007e-16, -0.99958, 1.05632e-15, 1, 3.38531e-16, 0.99958, -1.04607e-15, -0.0289858, -9.58174, 2.74612, 10.0909)
+script = ExtResource("1_20mow")
+metadata/_edit_group_ = true
+
+[node name="CSGBox3D" type="CSGBox3D" parent="obstacles/step2"]
+size = Vector3(3, 1, 5)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="obstacles/step2"]
+shape = SubResource("BoxShape3D_xkyby")
+
+[node name="step3" type="StaticBody3D" parent="obstacles"]
+transform = Transform3D(-0.0289858, 3.69007e-16, -0.99958, 1.05632e-15, 1, 3.38531e-16, 0.99958, -1.04607e-15, -0.0289858, -9.52118, 1.87356, 8.00257)
+script = ExtResource("1_20mow")
+metadata/_edit_group_ = true
+
+[node name="CSGBox3D" type="CSGBox3D" parent="obstacles/step3"]
+size = Vector3(3, 1, 5)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="obstacles/step3"]
+shape = SubResource("BoxShape3D_xkyby")
+
+[node name="step4" type="StaticBody3D" parent="obstacles"]
+transform = Transform3D(-0.0289858, 3.69007e-16, -0.99958, 1.05632e-15, 1, 3.38531e-16, 0.99958, -1.04607e-15, -0.0289858, -9.46788, 1.13302, 6.16449)
+script = ExtResource("1_20mow")
+metadata/_edit_group_ = true
+
+[node name="CSGBox3D" type="CSGBox3D" parent="obstacles/step4"]
+transform = Transform3D(1, -2.75599e-24, 4.80675e-10, -5.56955e-23, 1, -5.76973e-25, 4.80675e-10, -5.76973e-25, 1, 0, 0, 0)
+size = Vector3(3, 1, 5)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="obstacles/step4"]
+shape = SubResource("BoxShape3D_xkyby")
+
+[node name="step5" type="StaticBody3D" parent="obstacles"]
+transform = Transform3D(-4.37114e-08, 3.48787e-16, 1, 3.48787e-16, 1, -3.48787e-16, -1, 3.48787e-16, -4.37114e-08, -3.79641, 0.139743, -0.48009)
+script = ExtResource("1_20mow")
+metadata/_edit_group_ = true
+
+[node name="CSGBox3D" type="CSGBox3D" parent="obstacles/step5"]
+size = Vector3(3, 1, 5)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="obstacles/step5"]
+shape = SubResource("BoxShape3D_xkyby")
+
+[node name="camera pivot" type="Node3D" parent="."]
+transform = Transform3D(-0.866025, -0.211309, 0.453154, 3.16108e-16, 0.906308, 0.422618, -0.5, 0.365998, -0.784886, 2.08165e-12, 2.08165e-12, 2.08165e-12)
+
+[node name="Camera3D" type="Camera3D" parent="camera pivot" node_paths=PackedStringArray("player")]
+transform = Transform3D(1, -2.18152e-08, 1.69805e-08, 7.98713e-09, 1, 3.01246e-08, -1.28218e-08, 5.19398e-08, 1, -0.5, 1, 13)
+current = true
+fov = 45.0
+script = ExtResource("2_ad51y")
+player = NodePath("../../car")
+
+[node name="screen texture" type="MeshInstance3D" parent="camera pivot/Camera3D"]
+extra_cull_margin = 16384.0
+mesh = SubResource("QuadMesh_4wtd1")
+
+[node name="car" parent="." instance=ExtResource("4_bcv67")]
+transform = Transform3D(1, -3.48787e-16, 3.48787e-16, 3.48787e-16, 1, -3.48787e-16, -3.48787e-16, 3.48787e-16, 1, 2.08165e-12, 1, 2.08165e-12)
